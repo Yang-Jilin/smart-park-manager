@@ -1,5 +1,5 @@
 <template>
-  <el-container class="home-container">
+  <el-container class="home-container" direction="vertical">
     <el-header>
       <div class="header-content">
         <div class="logo">
@@ -14,17 +14,18 @@
         </div>
       </div>
     </el-header>
-    <el-container class="aside-content">
+    <el-container>
       <el-aside width="200px">
         <el-menu
-          default-active="home"
+          :default-active="$route.path"
           class="el-menu-vertical"
+          router
         >
-          <el-menu-item index="home">
+          <el-menu-item index="/dashboard" >
             <el-icon><House /></el-icon>
             <span>首页</span>
           </el-menu-item>
-          <el-menu-item index="park">
+          <el-menu-item index="/park">
             <el-icon><User /></el-icon>
             <span>园区管理</span>
           </el-menu-item>
@@ -48,11 +49,7 @@
       </el-aside>
       <el-main>
         <div class="main-content">
-          <h2>欢迎使用智慧园区管理系统</h2>
-          <el-card class="welcome-card">
-            <p>这是一个基于Element Plus构建的智慧园区管理系统界面。</p>
-            <p>左侧为导航菜单，右侧为主要内容区域。</p>
-          </el-card>
+          <router-view/>
         </div>
       </el-main>
     </el-container>
@@ -70,7 +67,7 @@ import { House, User, Setting } from '@element-plus/icons-vue'
   width: 100vw;
 
   .el-header {
-    height: 60px;
+    --header-height: 60px;
     line-height: 60px;
     background-color: var(--primary-color);
     color: #fff;
@@ -100,33 +97,8 @@ import { House, User, Setting } from '@element-plus/icons-vue'
     }
   }
 
-  .home-content {
-    height: calc(100vh - 60px);
-
-    .el-aside {
-      background-color: var(--secondary-color);
-
-      .el-menu-vertical {
-        border-right: none;
-      }
-    }
-
-    .el-main {
-      background-color: #f5f5f5;
-      padding: 20px;
-
-      .main-content {
-        .welcome-card {
-          max-width: 600px;
-          margin: 20px 0;
-
-          p {
-            line-height: 1.6;
-            margin: 10px 0;
-          }
-        }
-      }
-    }
+  > .el-container {
+    flex: 1;
   }
 }
 
