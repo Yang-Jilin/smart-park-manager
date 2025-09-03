@@ -19,16 +19,21 @@ const router = createRouter({
           name: 'park',
           component: () => import('@/views/subviews/Park.vue'),
         },
-        // {
-        //   path: '/building',
-        //   name: 'building',
-        //   component: () => import('@/views/subviews/Building.vue'),
-        // },
-        // {
-        //   path: '/room',
-        //   name: 'room',
-        //   component: () => import('@/views/subviews/Room.vue'),
-        // },
+        {
+          path: '/building',
+          name: 'building',
+          component: () => import('@/views/subviews/Building.vue'),
+        },
+        {
+          path: '/floor',
+          name: 'floor',
+          component: () => import('@/views/subviews/Floor.vue'),
+        },
+        {
+          path: '/room',
+          name: 'room',
+          component: () => import('@/views/subviews/Room.vue'),
+        },
         // {
         //   path: '/parking',
         //   name: 'parking',

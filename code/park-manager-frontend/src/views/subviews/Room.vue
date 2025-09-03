@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div class="page-header">
-      <h2 class="page-title">园区管理</h2>
+      <h2 class="page-title">房间管理</h2>
       <div class="action-bar">
-        <el-button type="primary" :icon="Plus" @click="handleAdd">新增园区</el-button>
+        <el-button type="primary" :icon="Plus" @click="handleAdd">新增房间</el-button>
         <el-button
           type="danger"
           :icon="Delete"
@@ -17,14 +17,31 @@
 
     <el-card class="filter-card">
       <el-form :model="searchForm" label-width="80px" :inline="true">
-        <el-form-item label="园区名称">
-          <el-input v-model="searchForm.parkName" placeholder="请输入园区名称" clearable></el-input>
+        <el-form-item label="所属园区">
+          <el-select
+            v-model="searchForm.parkName"
+            placeholder="请选择园区"
+            clearable
+            style="width: 180px"
+          >
+          </el-select>
         </el-form-item>
-        <el-form-item label="所属区域">
-          <el-select v-model="searchForm.region" placeholder="请选择区域" clearable style="width: 180px;">
-            <el-option label="区域1" value="区域1"></el-option>
-            <el-option label="区域2" value="区域2"></el-option>
-            <el-option label="区域3" value="区域3"></el-option>
+        <el-form-item label="所属楼宇">
+          <el-select
+            v-model="searchForm.buildingName"
+            placeholder="请选择楼宇"
+            clearable
+            style="width: 180px"
+          >
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属楼层">
+          <el-select
+            v-model="searchForm.floorNo"
+            placeholder="请选择楼层"
+            clearable
+            style="width: 180px"
+          >
           </el-select>
         </el-form-item>
         <el-form-item label="建成时间">
@@ -56,11 +73,12 @@
       >
         <el-table-column type="selection" width="55" />
         <el-table-column type="index" label="序号" width="60" />
-        <el-table-column prop="parkName" label="园区名称" min-width="150" show-overflow-tooltip />
-        <el-table-column prop="address" label="地址" min-width="200" show-overflow-tooltip />
-        <el-table-column prop="parkArea" label="园区面积(㎡)" width="120" />
-        <el-table-column prop="buildTime" label="建成时间" width="120" />
-        <el-table-column prop="region" label="所属区域" width="120" />
+        <el-table-column prop="floorNo" label="所属楼层" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="roomNo" label="房间号" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="roomArea" label="房间面积" width="120" />
+        <el-table-column prop="roomType" label="户型" width="120" />
+        <el-table-column prop="direction" label="朝向" width="120" />
+        <el-table-column prop="decoration" label="装修标准" width="120" />
         <el-table-column label="操作" width="220" fixed="right">
           <template #default="scope">
             <el-button link type="primary" :icon="View" @click="viewDetail(scope.row)"
@@ -94,58 +112,11 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import {
-  Search,
-  Plus,
-  Delete,
-  Refresh,
-  View,
-  Edit,
-  List,
-  Grid,
-  More,
-  Location,
-  Aim,
-  Calendar,
-  FullScreen,
-} from '@element-plus/icons-vue'
+import { Search, Plus, Delete, Refresh, View, Edit } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 // 表格数据
-const tableData = ref([
-  {
-    id: 1,
-    parkName: '科技创新园区',
-    address: '北京市海淀区中关村南大街5号',
-    parkArea: '10000',
-    buildTime: '2020-01-01',
-    region: '区域1',
-  },
-  {
-    id: 2,
-    parkName: '数字经济产业园',
-    address: '上海市浦东新区张江高科技园区',
-    parkArea: '20000',
-    buildTime: '2020-01-02',
-    region: '区域2',
-  },
-  {
-    id: 3,
-    parkName: '生物医药产业园',
-    address: '广州市黄埔区科学城',
-    parkArea: '15000',
-    buildTime: '2021-03-15',
-    region: '区域3',
-  },
-  {
-    id: 4,
-    parkName: '智能制造产业园',
-    address: '深圳市南山区高新科技园',
-    parkArea: '25000',
-    buildTime: '2019-07-20',
-    region: '区域1',
-  },
-])
+const tableData = ref([])
 
 // 分页相关
 const currentPage = ref(1)
@@ -154,8 +125,8 @@ const loading = ref(false)
 
 // 搜索表单
 const searchForm = reactive({
+  buildingName: '',
   parkName: '',
-  region: '',
   buildTimeRange: [],
 })
 
@@ -179,8 +150,8 @@ const handleSearch = () => {
 
 // 重置搜索
 const resetSearch = () => {
+  searchForm.buildingName = ''
   searchForm.parkName = ''
-  searchForm.region = ''
   searchForm.buildTimeRange = []
   handleSearch()
 }
@@ -196,28 +167,28 @@ const refreshData = () => {
 
 // 新增园区
 const handleAdd = () => {
-  ElMessage.info('打开新增园区表单')
+  ElMessage.info('打开新增房间表单')
 }
 
 // 编辑园区
 const handleEdit = (row) => {
-  ElMessage.info(`编辑园区: ${row.parkName}`)
+  ElMessage.info(`编辑房间: ${row.roomNo}`)
 }
 
 // 查看详情
 const viewDetail = (row) => {
-  ElMessage.info(`查看园区详情: ${row.parkName}`)
+  ElMessage.info(`查看房间详情: ${row.roomNo}`)
 }
 
 // 删除单个园区
 const handleDelete = (row) => {
-  ElMessageBox.confirm(`确定要删除园区 "${row.parkName}" 吗？`, '删除确认', {
+  ElMessageBox.confirm(`确定要删除楼层 "${row.roomNo}" 吗？`, '删除确认', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
   })
     .then(() => {
-      ElMessage.success(`删除成功: ${row.parkName}`)
+      ElMessage.success(`删除成功: ${row.roomNo}`)
     })
     .catch(() => {
       ElMessage.info('已取消删除')
@@ -227,17 +198,17 @@ const handleDelete = (row) => {
 // 批量删除
 const handleBatchDelete = () => {
   if (selectedRows.value.length === 0) {
-    ElMessage.warning('请至少选择一个园区')
+    ElMessage.warning('请至少选择一个房间')
     return
   }
 
-  ElMessageBox.confirm(`确定要删除选中的 ${selectedRows.value.length} 个园区吗？`, '批量删除确认', {
+  ElMessageBox.confirm(`确定要删除选中的 ${selectedRows.value.length} 个房间吗？`, '批量删除确认', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
   })
     .then(() => {
-      ElMessage.success(`成功删除 ${selectedRows.value.length} 个园区`)
+      ElMessage.success(`成功删除 ${selectedRows.value.length} 个房间`)
       selectedRows.value = []
     })
     .catch(() => {
@@ -289,13 +260,12 @@ onMounted(() => {
     display: flex;
     justify-self: start;
     gap: 8px;
-    
   }
 
   .table-card {
     margin-bottom: 16px;
   }
-  
+
   .pagination-container {
     display: flex;
     justify-content: center;
