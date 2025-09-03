@@ -16,12 +16,8 @@
     </el-header>
     <el-container>
       <el-aside width="200px">
-        <el-menu
-          :default-active="$route.path"
-          class="el-menu-vertical"
-          router
-        >
-          <el-menu-item index="/dashboard" >
+        <el-menu :default-active="$route.path" class="el-menu-vertical" router>
+          <el-menu-item index="/dashboard">
             <el-icon><House /></el-icon>
             <span>首页</span>
           </el-menu-item>
@@ -49,7 +45,7 @@
       </el-aside>
       <el-main>
         <div class="main-content">
-          <router-view/>
+          <router-view />
         </div>
       </el-main>
     </el-container>
@@ -61,7 +57,6 @@ import { House, User, Setting } from '@element-plus/icons-vue'
 </script>
 
 <style scoped lang="scss">
-
 .home-container {
   height: 100vh;
   width: 100vw;
@@ -99,7 +94,9 @@ import { House, User, Setting } from '@element-plus/icons-vue'
 
   > .el-container {
     flex: 1;
+    .el-main {
+      padding: 20px;
+    }
   }
 }
-
 </style>
